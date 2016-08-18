@@ -335,7 +335,7 @@ class StrategyBase:
                                             return True
                                 except (UndefinedError, AnsibleUndefinedVariable) as e:
                                     pass
-                            return parent_handler_match(target_handler._parent, handler_name)
+                            return parent_handler_match(target_handler._task_include, handler_name)  # _task_include has been renamed to ._parent in 2.2
                         else:
                             return False
 
