@@ -236,7 +236,7 @@ class VariableManager:
             # if we have a task in this context, and that task has a role, make
             # sure it sees its defaults above any other roles, as we previously
             # (v1) made sure each task had a copy of its roles default vars
-            if task and task._role is not None:
+            if task and task._role is not None and task._block is not None:
                 all_vars = combine_vars(all_vars, task._role.get_default_vars(dep_chain=task._block.get_dep_chain()))
 
         if host:
@@ -333,7 +333,7 @@ class VariableManager:
         # follow the role dependency chain, and then we merge in the tasks
         # vars (which will look at parent blocks/task includes)
         if task:
-            if task._role:
+            if task._role and task._block is not None:
                 all_vars = combine_vars(all_vars, task._role.get_vars(task._block._dep_chain, include_params=False))
             all_vars = combine_vars(all_vars, task.get_vars())
 
@@ -345,7 +345,7 @@ class VariableManager:
 
         # next, we merge in role params and task include params
         if task:
-            if task._role:
+            if task._role and task._block is not None:
                 all_vars = combine_vars(all_vars, task._role.get_role_params(task._block.get_dep_chain()))
 
             # special case for include tasks, where the include params
